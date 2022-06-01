@@ -4,7 +4,7 @@ const { MONGO_TEST_SERVER } = process.env
 const mongooseOptions = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  runValidators: true,
+  // runValidators: true,
 };
 
 if (MONGO_TEST_SERVER !== undefined) {

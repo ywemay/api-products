@@ -48,14 +48,14 @@ exports.getItem = async ({lng, published, currency} = {lng: "en"}) => {
     const keywords = await faker.lorem.words(len.keywords).split(' ');
 
     const item = {
-      sku: await faker.lorem.word(len.sku),
+      sku: await faker.random.alphaNumeric(len.sku),
       title: await faker.commerce.productName(),
       images: await fakeImages(),
       keywords: await keywords,
       description: await faker.commerce.productDescription(),
       options: await fakeOptions(),
       price: await faker.datatype.number({min: 300, max: 36000}),
-      cucurrency: currency || await faker.finance.currencyCode(),
+      currency: currency || await faker.finance.currencyCode(),
       published: published !== undefined ? published : await faker.datatype.boolean(),
     }
 

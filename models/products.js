@@ -42,7 +42,7 @@ const definition = {
     type: String,
     required: true,
     maxLength: 4,
-    default:  CURRENCY
+    default: CURRENCY
   },
   published: {
     type: Boolean,

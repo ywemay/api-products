@@ -3,13 +3,14 @@ const { hasRole } = require('ywemay-api-user')
 const ADMIN = 'admin';
 const MANAGER = 'manager';
 const SELLER = 'seller';
+const CUSTOMER = 'customer';
 
 exports.canView = (user, _item) => {
-  return hasRole(user, [ADMIN, MANAGER, SELLER]);
+  return hasRole(user, [ADMIN, MANAGER, SELLER, CUSTOMER]);
 }
 
 exports.canList = (user) => {
-  return hasRole(user, [ADMIN, MANAGER, SELLER]);
+  return hasRole(user, [ADMIN, MANAGER, SELLER, CUSTOMER]);
 }
 
 exports.scopedFilter = (user) => {

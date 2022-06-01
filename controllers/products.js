@@ -1,17 +1,23 @@
 const { reqPage, keyFilter } = require("ywemay-api-utils");
-const { sendError, sendData, ifFound } = require('ywemay-api-send');
+const { sendError, ifFound } = require('ywemay-api-send');
 
 const Model = require('../models/products');
 
-const getScoppedFilter = (req) => {
-  const { scopedFilter, userData } = req;
-  return typeof scoppedFilter === 'function' ? scopedFilter(userData) : {};
+const getScopedFilter = (req) => {
+  try {
+    const { scopedFilter, userData } = req;
+    const rez = typeof scopedFilter === 'function' ? scopedFilter(userData) : {};
+    return rez;
+  }
+  catch (err) {
+    console.error(err);
+  }
 }
 
-exports.setSearchFilter = (req, res, next) => {
+exports.setSearchFilter = (req, _res, next) => {
   try {
     const { t, enabled } = req.query;
-    const q = getScoppedFilter(req);
+    const q = getScopedFilter(req);
     if (t) {
       const re = new RegExp(t, 'i');
       q.$or = [
@@ -22,7 +28,8 @@ exports.setSearchFilter = (req, res, next) => {
     if (enabled !== undefined) {
       q.enabled = enabled
     }
-    req.search = q;
+    req.searchFilter = q;
+    next();
   }
   catch (e) {
     console.error(e);
@@ -35,17 +42,13 @@ exports.countDocuments = (req, res, next) => {
    .then((total) => {
      res.data = res.data || {};
      res.data.pagination = { total, page }
-     if (total === 0) {
-       res.data.items = [];
-       return sendData(res);
-     }
      next();
    })
    .catch(err => sendError(res, err));
 }
 
 exports.list = (req, res, next) => {
-  const { page } = res.data.pagination;
+  const { page, total } = res.data.pagination;
   const { sort, limit } = req.params;
   Model.find(req.searchFilter || {})
     .select(['sku', 'title', 'images'])
@@ -70,39 +73,47 @@ exports.createItem = ({ data, alter } = {}) => {
     if (typeof alter === 'function') alter(values);
     const item = new Model(values);
     item.save()
-      .then(newItem => resolve(newItem))
-      .catch(err => reject(err));
+    .then(newItem => resolve(newItem))
+    .catch(err => reject(err));
   });
 }
 
 exports.create = (req, res, next) => {
-  const { body, alter }= req; 
-  this.createItem({data: body, alter})
-    .then((newItem) => {
-      const { _id } = newItem;
-      res.data = {
-        createdItem: { _id }
-      }
-      next();
-    })
-    .catch(err => sendError(res, err));
+  const { body, alter }= req;
+  try {
+    exports.createItem({data: body, alter})
+      .then((newItem) => {
+        const { _id } = newItem;
+        res.data = {
+          createdItem: { _id }
+        }
+        next();
+      })
+  } catch(err) {
+    console.error(err);
+    sendError(res, err);
+  }
 }
 
 exports.getItem = (req, res, next) => {
-  const allowed = Object.keys(Model.definition);
-  const q = getScoppedFilter(req);
-  q._id = req.params.id;
-  Model.findOne(q)
-    .select(allowed)
-    .exec()
-    .then(item => {
-      ifFound(item, res, () => {
-        if (!res.data) res.data = {};
-        res.data.item = item;
-        next();
+  try {
+    const allowed = Object.keys(Model.definition);
+    const q = getScopedFilter(req);
+    q._id = req.params.id;
+    Model.findOne(q)
+      .select(allowed)
+      .exec()
+      .then(item => {
+        ifFound(item, res, () => {
+          if (!res.data) res.data = {};
+          res.data.item = item;
+          next();
+        })
       })
-    })
-    .catch(err => sendError(res, err))
+  } catch(err) {
+    console.error(err);
+    sendError(res, err);
+  }
 }
 
 exports.update = (req, res, next) => {

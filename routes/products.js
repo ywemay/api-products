@@ -4,9 +4,15 @@ const validate = require("ywemay-api-validate")
 const { checkAuth, authAction } = require('ywemay-api-user');
 
 const cProduct = require('../controllers/products');
-const { schema } = require('../validators/product');
+const schema = require('../validators/product');
 const perm = require('../permissions/products');
   
+const log = (msg) => {
+  return (_req, _res, next) => {
+    console.log(msg);
+    next();
+  }
+}
 router.get("/",
   checkAuth,
   authAction(perm.canList),

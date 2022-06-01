@@ -11,9 +11,9 @@ const OPTION_SHAPE = {
   image: yup.string().max(255).required(),
   key: yup.string().max(25).required(),
   title: yup.string().max(255).required(),
-  exclude: yup.array().og(string().max(25).required()),
-  limit: yup.array().og(string().max(25).required()),
-  priceChange: yup.integer(),
+  exclude: yup.array().of(yup.string().max(25).required()),
+  limit: yup.array().of(yup.string().max(25).required()),
+  priceChange: yup.number(),
 }
 
 const SHAPE = {
@@ -23,6 +23,8 @@ const SHAPE = {
   keywords: yup.array().of(yup.string().max(35)),
   description: yup.string(),
   options: yup.array().of(yup.array().of(yup.object().shape(OPTION_SHAPE))),
+  price: yup.number().min(0),
+  currency: yup.string().min(1).max(5),
   published: yup.boolean(),
 };
 
