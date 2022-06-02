@@ -3,21 +3,19 @@ const { sendError, ifFound } = require('ywemay-api-send');
 
 const Model = require('../models/products');
 
-const getScopedFilter = (req) => {
-  try {
-    const { scopedFilter, userData } = req;
-    const rez = typeof scopedFilter === 'function' ? scopedFilter(userData) : {};
-    return rez;
-  }
-  catch (err) {
-    console.error(err);
-  }
+exports.setScopedFilter = ({scopedFilter}) =>{
+  return (req, res, next) => {
+    const { userData } = req;
+    req.scopedFilter = typeof scopedFilter === 'function' ? scopedFilter(userData) : {};
+    next();
+  } 
 }
 
 exports.setSearchFilter = (req, _res, next) => {
   try {
+    const { scopedFilter } = req;
     const { t, enabled } = req.query;
-    const q = getScopedFilter(req);
+    const q = scopedFilter || { published: true };
     if (t) {
       const re = new RegExp(t, 'i');
       q.$or = [
@@ -97,8 +95,9 @@ exports.create = (req, res, next) => {
 
 exports.getItem = (req, res, next) => {
   try {
+    const { scopedFilter } = req;
     const allowed = Object.keys(Model.definition);
-    const q = getScopedFilter(req);
+    const q = scopedFilter || { published: true };
     q._id = req.params.id;
     Model.findOne(q)
       .select(allowed)

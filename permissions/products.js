@@ -5,7 +5,7 @@ const MANAGER = 'manager';
 const SELLER = 'seller';
 const CUSTOMER = 'customer';
 
-exports.canView = (user, _item) => {
+exports.canView = (user) => {
   return hasRole(user, [ADMIN, MANAGER, SELLER, CUSTOMER]);
 }
 
@@ -18,14 +18,14 @@ exports.scopedFilter = (user) => {
   return { published: true };
 }
 
-exports.canPost = (user, _item, {req}) => {
+exports.canPost = (user) => {
   return hasRole(user, [ADMIN, MANAGER, SELLER]);
 }
 
-exports.canPut = (user, item, {req} = {}) => {
+exports.canPut = (user) => {
   return hasRole(user, [ADMIN, MANAGER, SELLER]);
 }
 
-exports.canDelete = (user, item, {flags, req} = {}) => {
+exports.canDelete = (user) => {
   return hasRole(user, [ADMIN, MANAGER]);
 }

@@ -35,12 +35,12 @@ module.exports = {
   schema,
   option_schema,
 
-  newItem: () => {
+  postSchema: () => {
     const keys = Object.keys(SHAPE);
     return schemaAndKeys(schema, keys);
   },
 
-  update: ({req}) => {
+  putSchema: ({req}) => {
     const pickKeys = Object.keys(req.body);
     return schema.pick(pickKeys);
   }

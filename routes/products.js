@@ -1,58 +1,23 @@
-const router = require("express").Router();
-const { send } = require("ywemay-api-send")
-const validate = require("ywemay-api-validate")
-const { checkAuth, authAction } = require('ywemay-api-user');
+const validators = require('../validators/product');
+const permissions = require('../permissions/products');
+const makeRouter = require('../utils/make-product-routes');
 
-const cProduct = require('../controllers/products');
-const schema = require('../validators/product');
-const perm = require('../permissions/products');
-  
-const log = (msg) => {
-  return (_req, _res, next) => {
-    console.log(msg);
-    next();
-  }
-}
-router.get("/",
-  checkAuth,
-  authAction(perm.canList),
-  cProduct.setSearchFilter,
-  cProduct.countDocuments,
-  cProduct.list,
-  send
-);
-
-router.post("/",
-  checkAuth, 
-  authAction(perm.canPost),
-  validate(schema.newItem),
-  cProduct.create, 
-  send
-);
-
-router.get("/:id",
-  checkAuth,
-  cProduct.getItem,
-  authAction(perm.canView),
-  send
-);
-
-router.put("/:id",
-  checkAuth,
-  cProduct.getItem,
-  authAction(perm.canPut),
-  validate(schema.update),
-  cProduct.update,
-  send
-);
-
-router.delete("/:id",
-  checkAuth,
-  cProduct.getItem,
-  authAction(perm.canDelete),
-  cProduct.del,
-  send
-);
+const router = makeRouter({validators, permissions});
 
 module.exports = router;
 
+/*
+const router = require("express").Router();
+const { postSchema, putSchema } = require('../validators/product');
+const { canList, canView, canPost, canPut, canDelete } = require('../permissions/products');
+const { getList, getItem, postItem, putItem, deleteItem } = require('../sets/products');
+
+router.get("/", getList({canList})); 
+router.get("/:id", getItem({canView}));
+
+router.post("/", postItem({canPost, postSchema}));
+router.put("/:id", putItem({canPut, putSchema}));
+router.delete("/:id", deleteItem({canDelete}));
+
+module.exports = router;
+*/
