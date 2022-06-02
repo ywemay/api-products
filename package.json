@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ywemay/API-Products.git"
+    "url": "git+https://github.com/ywemay/api-products.git"
   },
   "keywords": [
     "api",
@@ -18,9 +18,9 @@
   "author": "Cibuc Dorian",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ywemay/API-Products/issues"
+    "url": "https://github.com/ywemay/api-products/issues"
   },
-  "homepage": "https://github.com/ywemay/API-Products#readme",
+  "homepage": "https://github.com/ywemay/api-products#readme",
   "devDependencies": {
     "@faker-js/faker": "^7.1.0",
     "chai": "^4.3.6",
