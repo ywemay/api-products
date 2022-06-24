@@ -1,4 +1,5 @@
-require('dotenv-flow').config()
+if (process.env.MONGO_TEST_SERVER === undefined)
+  require('dotenv-flow').config()
 require('./db');
 const http = require('http');
 const express = require('express');

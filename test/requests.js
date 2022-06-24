@@ -33,7 +33,7 @@ exports.checkListItems = ({done, token, products, status = 200}) => {
 }
 
 exports.checkGetItem = ({done, token, item, status = 200}) => {
-  const url = uri + '/' + item._id.toString();
+  const url = uri + '/id/' + item._id.toString();
   chai.request(server)
   .get(url)
   .set({"x-token": token, ...headers})
@@ -50,6 +50,7 @@ exports.checkGetItem = ({done, token, item, status = 200}) => {
 }
 
 exports.checkCreateItem = ({done, token, item, status = 200}) => {
+  // if (Array.isArray(item.keywords)) item.keywords = item.keywords.map(v => ({id: v}))
   chai.request(server)
   .post(uri)
   .set({"x-token": token, ...headers})
@@ -59,16 +60,18 @@ exports.checkCreateItem = ({done, token, item, status = 200}) => {
       res.status.should.be.eq(status);
       if (status === 200) {
         res.body.createdItem.should.be.an('object');
-        res.body.createdItem._id.should.be.a('string');
+        res.body.createdItem.id.should.be.a('string');
       }
       done();
+    } else {
+      console.error(err);
     }
   })
 }
 
 exports.checkModifyItem = ({done, token, item, status = 200}) => {
   chai.request(server)
-  .put(uri + '/' + item._id.toString())
+  .put(uri + '/id/' + item._id.toString())
   .set({"x-token": token, ...headers})
   .send({ops: {published: true, title: 'Modified Product'}})
   .end((err, res) => {
@@ -85,7 +88,7 @@ exports.checkModifyItem = ({done, token, item, status = 200}) => {
 
 exports.checkDeleteItem = ({done, item, token, status = 200}) => {
   chai.request(server)
-  .delete(uri + '/' + item._id.toString())
+  .delete(uri + '/id/' + item._id.toString())
   .set({"x-token": token, ...headers})
   .end((err, res) => {
     if (!err) {

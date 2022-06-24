@@ -34,6 +34,7 @@ describe('Products management  CRUD routes', () => {
 
     it('should not create a new item', (done) => checkCreateItem({
       done, 
+      isCustomer: true,
       token,
       item: newProduct,
       status: 403

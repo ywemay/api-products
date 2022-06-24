@@ -1,6 +1,7 @@
 process.env.NODE_ENV = 'test';
 
-require('dotenv-flow').config()
+if (process.env.MONGO_TEST_SERVER === undefined)
+  require('dotenv-flow').config()
 
 const mongoose = require('mongoose');
 const { makeUser, Credentials } = require('ywemay-api-user/test/utils/dummy-users');
@@ -8,7 +9,7 @@ const { createUser } = require('ywemay-api-user/controllers/users');
 const logIn = require('ywemay-api-test/lib/login');
 const User = require('ywemay-api-user/models/user');
 const Flood = require('ywemay-api-user/models/flood');
-const Product = require('../models/products');
+const Product = require('../models/product');
 const { createItem } = require('../controllers/products');
 const { getItems, getItem } = require('../fake/product');
 
@@ -49,6 +50,7 @@ const getFakeProducts = async () => {
 
     products = await Product.find({});
     newProduct = await getItem({...params, published: true});
+    newProduct.keywords = newProduct.keywords.map(v => ({id: v}));
     return { products, newProduct }
   } catch (err) {
     console.error(err);

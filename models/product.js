@@ -21,7 +21,7 @@ const definition = {
   }],
   keywords: [{
     type: String,
-    required: true
+    required: false
   }],
   description: {
     type: String,
@@ -48,6 +48,10 @@ const definition = {
     type: Boolean,
     default: true,
   },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }
 }
 
 var productSchema = new mongoose.Schema(definition);
