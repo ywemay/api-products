@@ -15,10 +15,7 @@ const definition = {
     minLength: 3,
     maxLength: 255
   },
-  images: [{
-    type: String,
-    required: true,
-  }],
+  images: [{ type: String }],
   keywords: [{
     type: String,
     required: false
@@ -27,7 +24,7 @@ const definition = {
     type: String,
   },
   options: [[{
-    image: String, // image to trigger when this option is choosed
+    image: { type: String }, // image to trigger when this option is choosed
     key: { type: String, required: true, maxLength: 20}, 
     title: { type: String, required: true, maxLength: 150},
     exclude: [{type: String, required: true, maxLength: 20}], // incompatible with this option keys

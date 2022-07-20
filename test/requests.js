@@ -69,7 +69,7 @@ exports.checkCreateItem = ({done, token, item, status = 200}) => {
   })
 }
 
-exports.checkModifyItem = ({done, token, item, status = 200}) => {
+exports.checkModifyItem = ({ done, token, item, status = 200 }) => {
   chai.request(server)
   .put(uri + '/id/' + item._id.toString())
   .set({"x-token": token, ...headers})
@@ -86,7 +86,7 @@ exports.checkModifyItem = ({done, token, item, status = 200}) => {
   })
 }
 
-exports.checkDeleteItem = ({done, item, token, status = 200}) => {
+exports.checkDeleteItem = ({ done, item, token, status = 200 }) => {
   chai.request(server)
   .delete(uri + '/id/' + item._id.toString())
   .set({"x-token": token, ...headers})
@@ -94,6 +94,39 @@ exports.checkDeleteItem = ({done, item, token, status = 200}) => {
     if (!err) {
       res.status.should.be.eq(status);
       done();
+    }
+  })
+}
+
+exports.checkView = ({done, token, uri = '/products/img/test.png', status = 200}) => {
+  chai.request(server)
+  .get(uri)
+  .set({ "x-token": token })
+  .end((err, res) => {
+    if (!err) {
+      res.status.should.be.eq(status);
+      done();
+    }
+    else {
+      console.error(err);
+    }
+  })
+}
+
+exports.checkUpload = ({done, token, fileName = 'test.png', status = 200}) => {
+  chai.request(server)
+  .post('/products/upload/image')
+  .set({"x-token": token, ...headers})
+  .set({
+    'Content-Type': 'multipart/form-data'
+  })
+  .attach('file', './test/img/' + fileName)
+  .end((err, res) => {
+    if (!err) {
+      res.status.should.be.eq(status);
+      done();
+    } else {
+      console.error(err);
     }
   })
 }

@@ -5,10 +5,12 @@ const http = require('http');
 const express = require('express');
 const app = express()
 app.use(express.json())
+process.env.UPLOADS = __dirname + '/uploads';
+const { config } = require('ywemay-api-img-upload');
 
 const { authRoutes } = require('ywemay-api-user');
 const { productRoutes } = require('../index');
-
+config(app);
 app.use('/auth', authRoutes)
 app.use('/products', productRoutes)
 

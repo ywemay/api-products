@@ -5,7 +5,9 @@ const {
   checkGetItem,
   checkCreateItem,
   checkModifyItem,
-  checkDeleteItem
+  checkDeleteItem,
+  checkUpload,
+  checkView
 } = require('../requests')
 
 let token;
@@ -48,6 +50,22 @@ describe('Products management  CRUD routes', () => {
       done, 
       token,
       item: products[1],
-    }))
+    }));
+
+    it('should upload the test image as product photo', (done) => checkUpload({
+      token,
+      done
+    }));
+
+    it('should load the image', (done) => checkView({
+      token,
+      done
+    }));
+    
+    it('should load the image thumbnail', (done) => checkView({
+      token, 
+      uri: '/products/img/thumb/test.png', 
+      done
+    }));
   })
 });

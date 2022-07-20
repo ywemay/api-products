@@ -34,6 +34,7 @@
     "mongoose": "^6.3.4",
     "yup": "^0.32.11",
     "ywemay-api-controller": "^0.0.4",
+    "ywemay-api-img-upload": "^1.0.1",
     "ywemay-api-role": "^0.0.1",
     "ywemay-api-user": "^1.0.4"
   }
