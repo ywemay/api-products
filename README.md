@@ -26,10 +26,11 @@ const mongooseOptions = {
 mongoose.connect(MONGO_LINK, mongooseOptions);
 
 const { authRoutes } = require("ywemay-api-user");
-const { productRoutes } = require("ywemay-api-products");
+const { productRoutes, imageRoutes } = require("ywemay-api-products");
 
 app.use("/auth", authRoutes);
 app.use("/products", productRoutes);
+app.use("/img/product", imageRoutes);
 
 const server = http.createServer(app);
 // server.listen(process.env.PORT || 3000);

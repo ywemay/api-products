@@ -9,10 +9,11 @@ process.env.UPLOADS = __dirname + '/uploads';
 const { config } = require('ywemay-api-img-upload');
 
 const { authRoutes } = require('ywemay-api-user');
-const { productRoutes } = require('../index');
+const { productRoutes, imageRoutes } = require('../index');
 config(app);
 app.use('/auth', authRoutes)
 app.use('/products', productRoutes)
+app.use('/img/product', imageRoutes)
 
 const server = http.createServer(app);
 // server.listen(process.env.PORT || 3000);

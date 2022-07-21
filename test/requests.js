@@ -98,10 +98,9 @@ exports.checkDeleteItem = ({ done, item, token, status = 200 }) => {
   })
 }
 
-exports.checkView = ({done, token, uri = '/products/img/test.png', status = 200}) => {
+exports.checkView = ({done, uri = '/img/product/test.png', status = 200}) => {
   chai.request(server)
   .get(uri)
-  .set({ "x-token": token })
   .end((err, res) => {
     if (!err) {
       res.status.should.be.eq(status);

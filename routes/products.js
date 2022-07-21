@@ -20,8 +20,6 @@ router.use(checkAuth);
 
 router.get("/", getList);
 router.get("/id/:id", getOne);
-router.get("/img/:fileName", viewImage({ path: UPLOADS }));
-router.get("/thumb/:fileName", viewImage({ path: UPLOADS + '/thumb' }));
 router.get("/ref", getManyReference);
 router.post("/", create);
 router.post("/upload/image", uploadImage({ path: UPLOADS }), makeThumb({ size: { w: 160, h: 160}}), sendResult);

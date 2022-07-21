@@ -58,13 +58,11 @@ describe('Products management  CRUD routes', () => {
     }));
 
     it('should load the image', (done) => checkView({
-      token,
       done
     }));
     
     it('should load the image thumbnail', (done) => checkView({
-      token, 
-      uri: '/products/img/thumb/test.png', 
+      uri: '/img/product/thumb/test.png', 
       done
     }));
   })
